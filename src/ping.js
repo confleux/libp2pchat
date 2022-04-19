@@ -1,37 +1,15 @@
-import { createLibp2p } from 'libp2p'
-import { TCP } from '@libp2p/tcp'
-import { Noise } from '@chainsafe/libp2p-noise'
-import { Mplex } from '@libp2p/mplex';
+import { createNode } from "./createNode.js";
+
 
 import process from 'process';
 import { multiaddr } from "multiaddr";
 
-const DEFAULT_OPTS = {
-  addresses: {
-    listen: ['/ip4/0.0.0.0/tcp/0']
-  },
-  transports: [
-      new TCP()
-    ],
-  connectionEncryption: [
-    new Noise()
-  ],
-   streamMuxers: [
-     new Mplex()
-   ]
-};
-
-const createNode = async (opts) => {
-  const node = await createLibp2p(opts);
-
-  await node.start();
-  console.log("node has started");
-
-  return node;
-}
-
 const main = async () => {
-  const node = await createNode(DEFAULT_OPTS);
+  const node = await createNode({
+    addresses : {
+      listen: ['/ip4/0.0.0.0/tcp/0']
+    }
+  });
 
   console.log('listening on addresses:')
   node.getMultiaddrs().forEach(addr => {
